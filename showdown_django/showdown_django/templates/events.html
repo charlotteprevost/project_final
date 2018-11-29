@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <ul>
+		{% for event in events %}
+		    <li>
+    			{% for perf in event.performance %}
+			    	{{ perf.displayName }} | 
+				{% endfor %}
+				<br/>
+		        {{ event.venue.displayName }} | {{ event.location.city }} <br/>
+		        {{ event.start.date }} | {{ event.start.time }} <br/>
+		        <a href="{{ event.uri }}">Buy tickets!</a>
+		    </li>
+		    <br/>
+		{% endfor %}
+    </ul>
+
+
+{% endblock %}

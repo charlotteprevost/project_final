@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+# import "./secrets.py"
+import importlib.util
+spec = importlib.util.spec_from_file_location("secrets", "./secrets.py")
+secrets = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(secrets)
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,7 +26,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(5n=jbkqc$_1(n&tg_py0pw%@eao!4f0j(k=554!!rc-t5d7d$'
+SECRET_KEY = secrets.SECRET_KEY
+
+# Spotify
+SPOTIFY_CLIENT_ID = secrets.SPOTIFY_CLIENT_ID
+
+SPOTIFY_CLIENT_SECRET = secrets.SPOTIFY_CLIENT_SECRET
+
+# Songkick
+SONGKICK_API_KEY = secrets.SONGKICK_API_KEY
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +52,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'showdown',
+    'songkick_api',
+    'spotify_api',
+    'songkick_test',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +74,7 @@ ROOT_URLCONF = 'showdown_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(os.path.dirname(__file__), 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,6 +87,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'showdown_django.wsgi.application'
 
 
@@ -75,8 +96,11 @@ WSGI_APPLICATION = 'showdown_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'showdown',
+        'USER': 'showdownuser',
+        'PASSWORD': secrets.DATABASE_PASSWORD,
+        'HOST': 'localhost'
     }
 }
 
