@@ -28,13 +28,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = secrets.SECRET_KEY
 
-# Spotify
-SPOTIFY_CLIENT_ID = secrets.SPOTIFY_CLIENT_ID
+# # Spotify
+# SPOTIFY_CLIENT_ID = secrets.SPOTIFY_CLIENT_ID
 
-SPOTIFY_CLIENT_SECRET = secrets.SPOTIFY_CLIENT_SECRET
+# SPOTIFY_CLIENT_SECRET = secrets.SPOTIFY_CLIENT_SECRET
 
-# Songkick
-SONGKICK_API_KEY = secrets.SONGKICK_API_KEY
+# # Songkick
+# SONGKICK_API_KEY = secrets.SONGKICK_API_KEY
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -44,6 +44,9 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+LOCAL_APPS = [
+    # 'spotify_proxy'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -52,12 +55,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'showdown',
     'songkick_api',
-    'spotify_api',
-    'songkick_test',
+    # 'songkick_api_maybe',
+    # 'spotify-browser',
+    # 'spotify_proxy',
+    # 'spotipy',
     'rest_framework',
-]
+] + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -16,22 +16,21 @@ Including another URLconf
 
 
 from django.contrib import admin
-from django.urls import path, include
+# from django.urls import path
+from django.conf.urls import include, url
 
-from songkick_test.views import get_event
+from songkick_api.views_songkick import get_event, add_event
+from songkick_api.views_spotipy import index, callback
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-	path('', get_event),
+    # path('admin/', admin.site.urls),
+	# path('', get_event),
+    # url(r'^', include('spotify_proxy.urls'),  name='spotify_proxy'),
+    # url(r'^$', 'songkick_test.views.home', name='home'),
+    # url(r'^blog/', include('blog.urls')),
+    url(r'^callback/q/', callback),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^getEvents/', get_event),
+    url(r'^addEvent/', add_event),
+    url(r'^', index),
 ]
-
-
-# from django.conf.urls import patterns, include, url
-
-# urlpatterns = patterns('',
-#     # Examples:
-#     # url(r'^$', 'songkick_test.views.home', name='home'),
-#     # url(r'^blog/', include('blog.urls')),
-#     url(r'^admin/', include(admin.site.urls)),
-#     url(r'^', get_event),
-# )
