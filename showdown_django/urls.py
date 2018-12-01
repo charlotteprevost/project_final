@@ -24,8 +24,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path, re_path
 
-from songkick_api.views_songkick import get_event, add_event
-from songkick_api.views_spotipy import index, callback
+from showdown_app.views_songkick import get_event, add_event
+from showdown_app.views_spotify import index, callback
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^getEvents/', get_event),
     url(r'^addEvent/', add_event),
-    # url(r'^api/', include('songkick_api.urls')),
+    # url(r'^api/', include('showdown_app.urls')),
     # url(r'^', include('frontend.urls')),
     # re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
     url(r'^', index), # REACTIVATE FOR SPOTIFY

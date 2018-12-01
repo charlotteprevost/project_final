@@ -42,12 +42,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
-LOCAL_APPS = [
-    # 'spotify_proxy'
-]
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -55,10 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'songkick_api',
+    'showdown_app',
     'rest_framework',
     'frontend',
-] + LOCAL_APPS
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -41,6 +41,7 @@ The point of the application is twofold:
 - Artist B is now included in user's artists
 
 <h2 style="text-align: center;"> WIREFRAMES </h2>
+
 <p style="text-align: center;"><img src="./wireframes/ShowDown.png" alt="ShowDown"></p>
 <p style="text-align: center;"><img src="./wireframes/Spotify_Login.png" alt="Spotify_Login"></p>
 <p style="text-align: center;"><img src="./wireframes/User_Profile_Artists.png" alt="User_Profile_Artists"></p>

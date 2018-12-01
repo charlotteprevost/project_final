@@ -5,13 +5,22 @@ from django.db import models
 
 # Create your models here.
 
+class ShowDownUser(models.Model):
+	spotify_display_name = models.CharField(max_length=128)
+	spotify_id = models.CharField(max_length=128)
+
+	def __str__(self):
+		return self.spotify_display_name + ' | ' + self.spotify_id 
+
+
 class Event(models.Model):
 	event_id = models.IntegerField()
 	venue = models.CharField(max_length=128)
 	city = models.CharField(max_length=128)
 	datetime = models.DateTimeField()
 	uri = models.CharField(max_length=264)
-	# users_going = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events', default=None)
+	going = models.ForeignKey(ShowDownUser, on_delete=models.CASCADE, related_name='user_going', default=None)
+	maybe = models.ForeignKey(ShowDownUser, on_delete=models.CASCADE, related_name='user_maybe', default=None)
 
 	def __str__(self):
 		return self.venue + ', ' + self.city 

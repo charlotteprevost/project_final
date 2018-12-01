@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('songkick_api', '0001_initial'),
+        ('showdown_app', '0001_initial'),
     ]
 
     operations = [
