@@ -56,11 +56,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'songkick_api',
-    # 'songkick_api_maybe',
-    # 'spotify-browser',
-    # 'spotify_proxy',
-    # 'spotipy',
     'rest_framework',
+    'frontend',
 ] + LOCAL_APPS
 
 MIDDLEWARE = [
@@ -75,10 +72,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'showdown_django.urls'
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(os.path.dirname(__file__), 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'build')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -146,3 +147,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+  os.path.join(BASE_DIR, 'build/static'),
+]
+
