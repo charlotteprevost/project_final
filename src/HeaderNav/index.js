@@ -6,7 +6,15 @@ const HeaderNav = (props) => {
 
 return(
 	<Header>
-		<Menu>
+		<Menu inverted>
+			<Menu.Item>
+				<Link to="/home">Home</Link>
+			</Menu.Item>
+
+			<Menu.Item>
+				<Link to="/profile">My Profile</Link>
+			</Menu.Item>
+
 			<Menu.Item>
 				<Link to="/artists">My Artists</Link>
 			</Menu.Item>
@@ -23,7 +31,7 @@ return(
 				<Link to="/calendar">Calendar</Link>
 			</Menu.Item>
 
-			<Menu.Item>
+			<Menu.Item position='right'>
 				<Link to="/" onClick={props.handleLogout}>Logout</Link>
 			</Menu.Item>
 		</Menu>

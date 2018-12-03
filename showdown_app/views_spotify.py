@@ -32,7 +32,7 @@ SPOTIFY_API_URL = "{}/{}".format(SPOTIFY_API_BASE_URL, API_VERSION)
 
 CLIENT_SIDE_URL = "http://127.0.0.1"
 PORT = 3000
-REDIRECT_URI = "{}:{}/playlists/".format(CLIENT_SIDE_URL, PORT)
+REDIRECT_URI = "{}:{}/home/".format(CLIENT_SIDE_URL, PORT)
 SCOPE = "playlist-modify-public playlist-modify-private"
 STATE = ""
 SHOW_DIALOG_bool = True
@@ -104,13 +104,11 @@ def get_tokens(request):
 
 def get_playlists(request):
 
-	auth_token = request.GET.get('access_token')
-
+	access_token = request.GET.get('access_token')
+	
     #################### Spotify Authorization Code Flow - Step 6: Use the Access Token to Access Spotify API ####################
 
 	authorization_header = {"Authorization":"Bearer {}".format(access_token)}
-
-	print('-------------------- authorization_header --------------------\n', authorization_header)
 
     #################### Get Profile Data ####################
 
@@ -121,13 +119,9 @@ def get_playlists(request):
 
     #################### Get User Playlist Data ####################
 
-	playlist_api_endpoint = "{}/playlists".format(profile_data["href"])
+	playlist_api_endpoint = "{}/playlists/?limit=50".format(profile_data["href"])
 	playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
 	playlist_data = json.loads(playlists_response.text)
-
-    #################### Combine Profile and Playlist Data to Display ####################
-
-	# display_arr = [profile_data] + playlist_data["items"]
 
 	print('-------------------- playlist_data -------------------- \n', playlist_data)
 
@@ -135,6 +129,30 @@ def get_playlists(request):
 		'Content-Type': 'application/json',
 		'status': 200,
 		'data': playlist_data
+		}, safe=False)
+
+
+def get_profile(request):
+
+	access_token = request.GET.get('access_token')
+	
+    #################### Spotify Authorization Code Flow - Step 6: Use the Access Token to Access Spotify API ####################
+
+	authorization_header = {"Authorization":"Bearer {}".format(access_token)}
+
+    #################### Get Profile Data ####################
+
+	user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
+
+	profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
+	profile_data = json.loads(profile_response.text)
+
+	print('-------------------- profile_data -------------------- \n', profile_data)
+
+	return JsonResponse({
+		'Content-Type': 'application/json',
+		'status': 200,
+		'data': profile_data
 		}, safe=False)
 
 

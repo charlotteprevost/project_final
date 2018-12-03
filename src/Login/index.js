@@ -6,12 +6,15 @@ import serverURL from '../serverURL.js';
 
 const Login = (props) => {
 
-  return (
-    <div>
-		<h1>ShowDown</h1>
-		<Button><a href={serverURL}>Begin</a></Button>
-    </div>
-    )
+	const loginURL = serverURL + 'login/';
+	console.log(`------------ loginURL ------------`, loginURL);
+
+	return (
+		<div>
+			<h1>ShowDown</h1>
+			<Button><a href={ loginURL }>Begin</a></Button>
+		</div>
+	)
 }
 
 export default Login;

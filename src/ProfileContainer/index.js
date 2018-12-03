@@ -9,7 +9,8 @@ const ProfileContainer = (props) => {
 	return (
 		<Segment>
 			<Header as ='h2'>
-				Welcome to ShowDown!
+				<Image circular src={props.user_profile.spotify_image} /> 
+				{ props.user_profile.spotify_display_name }
 			</Header>
 
 		</Segment>
