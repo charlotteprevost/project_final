@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import getCookie from 'js-cookie';
+import { List, Image } from 'semantic-ui-react';
 // import queryString from 'query-string'
 
 
@@ -32,15 +33,9 @@ class PlaylistContainer extends Component {
 
     console.log(`---------- playlists ----------\n`, playlists);
 
-      // this.setState({
-      //   spotify_tokens:{
-      //     access_token: tokens.access_token,
-      //     expires_in: tokens.expires_in,
-      //     refresh_token: tokens.refresh_token,
-      //     scope: tokens.scope,
-      //     token_type: tokens.token_type
-      //   }
-      // });
+      this.setState({
+        playlists: playlists
+      });
 
     }).catch((err) => {
       console.error(`---------- Error: ----------\n`, err);
@@ -49,8 +44,36 @@ class PlaylistContainer extends Component {
 
 
   render(){
+
+    const user_playlists = this.state.playlists.map( playlist => {
+      const playlist_image = playlist.images.map((image, i) => {
+        if (i === 0){
+          return (
+            <Image rounded key={ image.url } floated='left' verticalAlign='middle' size='small' src={ image.url } />
+          )
+        }
+      })
+
+      return (
+        <List.Item size='small' key={ playlist.id }>
+            { playlist_image }
+            <List.Content>
+              <List.Header>
+              { playlist.name }
+              </List.Header>
+            </List.Content>
+        </List.Item>
+      )
+    })
+
+
     return(
-      <div><h1>PLAYLIST CONTAINER</h1></div>
+      <List>
+        <h1>PLAYLIST CONTAINER</h1>
+        { user_playlists }
+
+
+      </List>
         
     )
   }

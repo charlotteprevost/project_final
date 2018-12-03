@@ -1,10 +1,10 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
-import { Segment, Header, Image } from 'semantic-ui-react';
+import { Segment, Header } from 'semantic-ui-react';
 // import serverURL from '../serverURL.js';
 
 
-const ProfileContainer = (props) => {
+const Home = (props) => {
 
 	return (
 		<Segment>
@@ -16,4 +16,4 @@ const ProfileContainer = (props) => {
 	)
 }
 
-export default ProfileContainer;
+export default Home;

@@ -122,8 +122,7 @@ def get_playlists(request):
 	playlist_api_endpoint = "{}/playlists/?limit=50".format(profile_data["href"])
 	playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
 	playlist_data = json.loads(playlists_response.text)
-
-	print('-------------------- playlist_data -------------------- \n', playlist_data)
+	playlist_data = sorted(playlist_data["items"], key=lambda playlist: playlist["name"])
 
 	return JsonResponse({
 		'Content-Type': 'application/json',
@@ -147,13 +146,109 @@ def get_profile(request):
 	profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
 	profile_data = json.loads(profile_response.text)
 
-	print('-------------------- profile_data -------------------- \n', profile_data)
-
 	return JsonResponse({
 		'Content-Type': 'application/json',
 		'status': 200,
 		'data': profile_data
 		}, safe=False)
+
+
+def playlists_tracks(request):
+
+	access_token = request.GET.get('access_token')
+	
+    #################### Spotify Authorization Code Flow - Step 6: Use the Access Token to Access Spotify API ####################
+
+	authorization_header = {"Authorization":"Bearer {}".format(access_token)}
+
+    #################### Get Profile Data ####################
+
+	user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
+
+	profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
+	profile_data = json.loads(profile_response.text)
+
+    #################### Get User Playlist Data ####################
+
+	playlist_api_endpoint = "{}/playlists/?limit=50".format(profile_data["href"])
+	playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
+	playlist_data = json.loads(playlists_response.text)
+	playlist_data = sorted(playlist_data["items"], key=lambda playlist: playlist["name"])
+
+	# print('-------------------- playlist_data -------------------- \n', playlist_data)
+
+	playlists_api_endpoints = []
+	for playlist in playlist_data:
+		playlists_api_endpoints.append(playlist["href"])
+
+	# print('-------------------- playlists_api_endpoints -------------------- \n', playlists_api_endpoints)
+
+	playlists_tracks = []
+	for playlist_href in playlists_api_endpoints:
+		playlist_tracks_response = requests.get("{}/tracks?fields=items(track(name, href, artists(name, href, id)))".format(playlist_href), headers=authorization_header)
+		playlists_tracks_data = json.loads(playlist_tracks_response.text)
+		playlists_tracks.append(playlists_tracks_data)
+
+	print('-------------------- playlists_tracks -------------------- \n', playlists_tracks)
+
+
+	return JsonResponse({
+		'Content-Type': 'application/json',
+		'status': 200,
+		'data': playlists_tracks
+		}, safe=False)
+
+
+
+def get_artists(request):
+
+	access_token = request.GET.get('access_token')
+	artists_ids = request.GET.get('ids')
+	
+	authorization_header = {"Authorization":"Bearer {}".format(access_token)}
+
+
+    #################### Get Artists Data ####################
+
+	artists_api_endpoint = "{}/artists?ids={}".format(SPOTIFY_API_URL, artists_ids)
+
+	artists_response = requests.get(artists_api_endpoint, headers=authorization_header)
+
+	artists_data = json.loads(artists_response.text)
+
+	# print('-------------------- artists_data -------------------- \n', artists_data)
+
+ #    #################### Get User Playlist Data ####################
+
+	# playlist_api_endpoint = "{}/playlists/?limit=50".format(profile_data["href"])
+	# playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
+	# playlist_data = json.loads(playlists_response.text)
+	# playlist_data = sorted(playlist_data["items"], key=lambda playlist: playlist["name"])
+
+	# # print('-------------------- playlist_data -------------------- \n', playlist_data)
+
+	# playlists_api_endpoints = []
+	# for playlist in playlist_data:
+	# 	playlists_api_endpoints.append(playlist["href"])
+
+	# # print('-------------------- playlists_api_endpoints -------------------- \n', playlists_api_endpoints)
+
+	# playlists_tracks = []
+	# for playlist_href in playlists_api_endpoints:
+	# 	playlist_tracks_response = requests.get("{}/tracks?fields=items(track(name, href, artists(name, href, id)))".format(playlist_href), headers=authorization_header)
+	# 	playlists_tracks_data = json.loads(playlist_tracks_response.text)
+	# 	playlists_tracks.append(playlists_tracks_data)
+
+	# print('-------------------- playlists_tracks -------------------- \n', playlists_tracks)
+
+
+	return JsonResponse({
+		'Content-Type': 'application/json',
+		'status': 200,
+		'data': artists_data
+		}, safe=False)
+
+
 
 
 
