@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import PlaylistContainer from './PlaylistContainer';
+import CalendarContainer from './CalendarContainer';
 import ProfileContainer from './ProfileContainer';
 import ArtistContainer from './ArtistContainer';
 import EventContainer from './EventContainer';
@@ -256,12 +257,17 @@ class App extends Component {
 
     try {
 
+      // if (event.venue.display_name === undefined) {
+      //   venue = ''
+      // }
+      console.log(`---------- THE EVENT ---------- \n `, event);
+
       const dataToSend = {
         spotify_id: this.state.user_profile.spotify_id,
         event_id: event.id,
-        venue: event.venue.display_name,
+        venue: event.venue.displayName,
         city: event.location.city,
-        datetime: event.start.datetime,
+        date: event.start.date,
         uri: event.uri
       };
       console.log(`---------- dataToSend ---------- \n `, dataToSend);
@@ -269,7 +275,7 @@ class App extends Component {
       const csrfCookie = getCookie('csrftoken');
       console.log(`---------- csrfCookie ---------- \n `, csrfCookie);
 
-      const createdEvent = await fetch('http://localhost:8000/event-new/', {
+      const createdEvent = await fetch('http://127.0.0.1:8000/event-new/', {
         method: 'POST',
         body: JSON.stringify(dataToSend),
         credentials: 'include',
@@ -357,17 +363,6 @@ class App extends Component {
             />
            } />
 
-          <Route exact path="/events" render={ (props) => 
-            <EventContainer {...props} 
-              // spotify_tokens={this.state.spotify_tokens} 
-              // handleTokens={this.handleTokens}
-              // handlePlaylists={this.handlePlaylists}
-              // handleArtists={this.handleArtists}
-              artists={this.state.artists}
-              addEvent={this.addEvent}
-            />}
-          />
-
           <Route exact path="/artists" render={ (props) => 
             <ArtistContainer {...props} 
               // spotify_tokens={this.state.spotify_tokens} 
@@ -383,6 +378,28 @@ class App extends Component {
               spotify_tokens={this.state.spotify_tokens} 
               handleTokens={this.handleTokens}
               handlePlaylists={this.handlePlaylists}
+            />}
+          />
+
+          <Route exact path="/events" render={ (props) => 
+            <EventContainer {...props} 
+              // spotify_tokens={this.state.spotify_tokens} 
+              // handleTokens={this.handleTokens}
+              // handlePlaylists={this.handlePlaylists}
+              // handleArtists={this.handleArtists}
+              artists={this.state.artists}
+              addEvent={this.addEvent}
+            />}
+          />
+
+          <Route exact path="/events" render={ (props) => 
+            <CalendarContainer {...props} 
+              // spotify_tokens={this.state.spotify_tokens} 
+              // handleTokens={this.handleTokens}
+              // handlePlaylists={this.handlePlaylists}
+              // handleArtists={this.handleArtists}
+              artists={this.state.calendar}
+              // addEvent={this.addEvent}
             />}
           />
           <Route component={ My404 }/>

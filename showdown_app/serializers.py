@@ -12,10 +12,10 @@
 
 # To recap: a Django REST serializer is mandatory for operating on models through the API.
 
-from rest_framework import serializers
-from .models import Event
+# from rest_framework import serializers
+# from .models import Event
 
-class EventSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Event
-        fields = '__all__'
+# class EventSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Event
+#         fields = '__all__'

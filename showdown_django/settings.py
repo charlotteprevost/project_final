@@ -41,13 +41,17 @@ CORS_ORIGIN_WHITELIST = [
     '127.0.0.1:3000',
 ]
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [
+    'localhost:3000',
+    '127.0.0.1:3000',
+]
 
 INSTALLED_APPS = [
     'corsheaders',
     'showdown_app',
-    'rest_framework',
+    # 'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,8 +61,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -102,7 +106,7 @@ DATABASES = {
         'NAME': 'showdown',
         'USER': 'showdownuser',
         'PASSWORD': secrets.DATABASE_PASSWORD,
-        'HOST': 'localhost'
+        'HOST': '127.0.0.1',
     }
 }
 
