@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import './App.css';
 
 import PlaylistContainer from './PlaylistContainer';
-import CalendarContainer from './CalendarContainer';
 import ProfileContainer from './ProfileContainer';
 import ArtistContainer from './ArtistContainer';
 import EventContainer from './EventContainer';
+import CalendarList from './CalendarList';
+import CalendarEdit from './CalendarEdit';
 import HeaderNav from './HeaderNav';
 import Login from './Login';
 import Home from './Home';
@@ -44,7 +45,12 @@ class App extends Component {
       },
       artists: [],
       playlists: [],
-      calendar: []
+      calendar: [],
+      eventToEdit: {
+        id: '',
+        going: ''
+      },
+      showEditModal: false
     }
   }
 
@@ -65,7 +71,7 @@ class App extends Component {
   handleTokens(){
   }
 
-  getSpotifyData = async () => {
+  getData = async () => {
 
     // ---------------------------------------- GET PROFILE DATA ---------------------------------------- //
 
@@ -94,8 +100,6 @@ class App extends Component {
 
     const playlistsParsedJSON = await getPlaylists.json();
 
-    console.log(`---------- playlistsParsedJSON.data ----------\n`, playlistsParsedJSON.data);
-
     const playlists = playlistsParsedJSON.data;
 
     let artistsArray = [];
@@ -113,8 +117,6 @@ class App extends Component {
       }
     }
 
-    console.log(`---------- artistsArray ----------\n`, artistsArray);
-
     // ---------- Remove artist duplicates from artistsArray ---------- //
     
     let artistObject = {};
@@ -128,8 +130,6 @@ class App extends Component {
     for (let key in artistObject) {
       uniqueArtistsArray.push(artistObject[key]);
     }
-
-    console.log(`---------- uniqueArtistsArray ----------\n`, uniqueArtistsArray);
 
     // ---------------------------------------- GET ARTISTS DATA ---------------------------------------- //
 
@@ -157,8 +157,6 @@ class App extends Component {
       }
     }
 
-    console.log(`---------- arrayOfStringFifties ----------\n`, arrayOfStringFifties);
-
     let artistsParsedJSON = null;
 
     for (let i = 0; i < arrayOfStringFifties.length; i++) {
@@ -172,21 +170,30 @@ class App extends Component {
         }
       });
 
-      // let artistsParsedJSON = await getArtists.json();
       artistsParsedJSON = await getArtists.json();
-
-      // artistsParsedData = 
-
-      console.log(`---------- artistsParsedJSON ----------\n`, artistsParsedJSON);
-
-
 
       for (let j = 0; j < artistsParsedJSON.data.artists.length; j++) {
         artistsDataFull.push(artistsParsedJSON.data.artists[j]);
       }
     }
 
-    console.log(`---------- artistsDataFull END ----------\n`, artistsDataFull);
+    // ---------------------------------------- GET CALENDAR DATA ---------------------------------------- //
+
+    csrfCookie = getCookie('csrftoken');
+    const calendarResponse = await fetch('http://127.0.0.1:8000/calendar/', {
+      method: 'POST',
+      body: JSON.stringify({spotify_id: spotifyProfileData.id}),
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfCookie
+      }
+    });
+    const calendarResponseParsedJSON = await calendarResponse.json();
+    console.log(`---------- calendarResponseParsedJSON ----------\n`, calendarResponseParsedJSON);
+
+    const calendarResponseData = calendarResponseParsedJSON.data
+    console.log(`---------- calendarResponseParsedJSON.data ----------\n`, calendarResponseParsedJSON.data);
 
     const newState = {
       user_profile: {
@@ -195,7 +202,8 @@ class App extends Component {
         spotify_id: spotifyProfileData.id
       },
       artists: artistsDataFull,
-      playlists: playlists
+      playlists: playlists,
+      calendar: calendarResponseParsedJSON.data
     }
 
     return newState;   
@@ -218,33 +226,33 @@ class App extends Component {
     console.log(`---------- createdUserParsedJSON ----------\n`, createdUserParsedJSON);
   }
 
-  handleLogout = async (e) => {
-    e.preventDefault();
+  // handleLogout = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      const cookie = getCookie('csrftoken');  
-      const logoutRequest = await fetch(serverURL + 'logout/', {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': cookie
-        }
-      })
+  //   try {
+  //     const cookie = getCookie('csrftoken');  
+  //     const logoutRequest = await fetch(serverURL + 'logout/', {
+  //       method: 'GET',
+  //       credentials: 'include',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'X-CSRFToken': cookie
+  //       }
+  //     })
 
-      const logoutRequestParsed = await logoutRequest.json();
+  //     const logoutRequestParsed = await logoutRequest.json();
 
-      if (logoutRequestParsed.data === 'Logout Successful') {
-        this.props.history.push('/login')                               // Redirect to Spotify Login
+  //     if (logoutRequestParsed.data === 'Logout Successful') {
+  //       this.props.history.push('/login')                               // Redirect to Spotify Login
       
-      } else {
-        console.error(`logoutRequestParsed.error: `, logoutRequestParsed.error);
-      }
+  //     } else {
+  //       console.error(`logoutRequestParsed.error: `, logoutRequestParsed.error);
+  //     }
 
-    } catch(err){
-      console.error(`Error catch in handleLogout: `, err);
-    }
-  }
+  //   } catch(err){
+  //     console.error(`Error catch in handleLogout: `, err);
+  //   }
+  // }
 
   handleArtists = async (artists) => {
     this.setState({
@@ -252,28 +260,24 @@ class App extends Component {
     })
   }
 
-  addEvent = async (event, e) => {
+  addEvent = async (userEvent, e) => {
     e.preventDefault();
 
     try {
 
-      // if (event.venue.display_name === undefined) {
-      //   venue = ''
-      // }
-      console.log(`---------- THE EVENT ---------- \n `, event);
+      console.log(`============EVENT==========\n`, userEvent);
 
       const dataToSend = {
         spotify_id: this.state.user_profile.spotify_id,
-        event_id: event.id,
-        venue: event.venue.displayName,
-        city: event.location.city,
-        date: event.start.date,
-        uri: event.uri
+        event_id: userEvent.id,
+        venue: userEvent.venue.displayName,
+        display_name: userEvent.displayName,
+        city: userEvent.location.city,
+        date: userEvent.start.date,
+        uri: userEvent.uri
       };
-      console.log(`---------- dataToSend ---------- \n `, dataToSend);
 
       const csrfCookie = getCookie('csrftoken');
-      console.log(`---------- csrfCookie ---------- \n `, csrfCookie);
 
       const createdEvent = await fetch('http://127.0.0.1:8000/event-new/', {
         method: 'POST',
@@ -287,17 +291,117 @@ class App extends Component {
 
       const createdEventParsed = await createdEvent.json();
 
-      console.log(`---------- createdEventParsed ---------- \n `, createdEventParsed);
+      // console.log(`============ createdEventParsed ==========\n`, createdEventParsed);
+      // console.log(`============ createdEventParsed.data ==========\n`, createdEventParsed.data);
 
-      // this.setState({
-      //   calendar: [...this.state.calendar, createdEventParsed.data]
-      // })
+      if (createdEventParsed.data !== undefined) {
+        this.setState({
+          calendar: [...this.state.calendar, createdEventParsed.data]
+        })
+      } else {
+        this.setState({
+          calendar: [...this.state.calendar]
+        })
+      }
+
 
     } catch(err) {
       console.error(`Error: `, err);
     }
   }
 
+  handleEventEditChange = (e, data) => {
+    console.log(`------------- e ------------\n`, e.currentTarget);
+    console.log(`------------- data ------------\n`, data);
+
+    this.setState({
+      eventToEdit: {
+        ...this.state.eventToEdit,
+        [data.name]: data.value
+      }
+    });
+  }
+
+  closeAndEdit = async (e) => {
+    e.preventDefault();
+
+    try {
+
+        if (this.state.eventToEdit.going === 'not') {
+
+          this.eventDelete(this.state.eventToEdit.id);
+
+        } else {
+          const csrfCookie = getCookie('csrftoken');
+
+          const editResponse = await fetch('http://127.0.0.1:8000/events/' + this.state.eventToEdit.id + '/edit/', {
+            method: 'PUT',
+            credentials: 'include',
+            body: JSON.stringify({
+              going: this.state.eventToEdit.going
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfCookie
+            }
+          });
+
+          const editResponseParsed = await editResponse.json();
+
+          const newEventArrayWithEdit = this.state.calendar.map(event => {
+
+            if(event.id === editResponseParsed.data.id){
+              event = editResponseParsed.data
+            }
+
+            return event
+          });
+
+          this.setState({
+            showEditModal: false,
+            calendar: newEventArrayWithEdit
+          });
+        }
+
+    } catch(err){
+      console.error(`Error: `, err)
+    }
+  }
+
+  openAndEdit = (eventFromCalendar) => {
+    // console.log(`----------- eventFromCalendar -----------\n`, eventFromCalendar);
+    this.setState({
+      showEditModal: true,
+      eventToEdit: {
+        ...eventFromCalendar
+      }
+    })
+  }
+
+  eventDelete = async (id) => {
+
+    const csrfCookie = getCookie('csrftoken');
+
+    const eventDeleteResponse = await fetch('http://127.0.0.1:8000/events/' + id + '/delete/', 
+      {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfCookie
+        }
+      }
+    );
+
+    const eventDeleteParsed = await eventDeleteResponse;
+
+    console.log(`---------- eventDeleteParsed ----------\n`, eventDeleteParsed)
+
+    this.setState({
+      showEditModal: false,
+      calendar: this.state.calendar.filter(event => event.id !== id)
+    })
+  }
 
   componentDidMount(){
     this.getSpotifyTokens().then(tokens => {
@@ -320,19 +424,17 @@ class App extends Component {
   }
 
   componentDidUpdate(){
-    console.log(`---------- this.state in componentDidUpdate ----------\n`, this.state)
     if (this.state.user_profile.spotify_display_name === ''){
 
-      this.getSpotifyData().then(newState => {
-
-        console.log(`---------- newState ----------\n`, newState)
+      this.getData().then(newState => {
 
         this.createShowDownUser(newState.user_profile);
 
         this.setState({
           user_profile: newState.user_profile,
           artists: newState.artists,
-          playlists: newState.playlists
+          playlists: newState.playlists,
+          calendar: newState.calendar
         })
 
       }).catch(err => {
@@ -346,6 +448,11 @@ class App extends Component {
     return (
       <div className="App">
         <HeaderNav handleLogout={this.handleLogout} />
+
+        {this.state.showEditModal ? (
+            <CalendarEdit open={this.state.showEditModal} eventToEdit={this.state.eventToEdit} 
+            handleEventEditChange={this.handleEventEditChange} closeAndEdit={this.closeAndEdit}/>
+            ) : null }
 
         <Switch>
           <Route exact path="/" render={ Login } />
@@ -392,16 +499,21 @@ class App extends Component {
             />}
           />
 
-          <Route exact path="/events" render={ (props) => 
-            <CalendarContainer {...props} 
+          <Route exact path="/calendar" render={ (props) => 
+            <CalendarList {...props} 
               // spotify_tokens={this.state.spotify_tokens} 
               // handleTokens={this.handleTokens}
               // handlePlaylists={this.handlePlaylists}
               // handleArtists={this.handleArtists}
-              artists={this.state.calendar}
+              // artists={this.state.artists}
+              calendar={this.state.calendar}
+              openAndEdit={this.openAndEdit}
+              eventDelete={this.eventDelete}
+              // closeAndEdit={this.closeAndEdit}
               // addEvent={this.addEvent}
             />}
           />
+
           <Route component={ My404 }/>
         </Switch>
       </div>

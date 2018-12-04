@@ -32,7 +32,7 @@ return(
 			</Menu.Item>
 
 			<Menu.Item position='right'>
-				<Link to="/" onClick={props.handleLogout}>Logout</Link>
+				<Link to="/">Logout</Link>
 			</Menu.Item>
 		</Menu>
 	</Header>

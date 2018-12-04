@@ -16,10 +16,8 @@ Including another URLconf
 
 from django.conf.urls import url
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.urls import include
 
-from showdown_app.views_songkick import Event, Event_Detail
-from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

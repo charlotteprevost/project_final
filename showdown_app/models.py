@@ -18,6 +18,7 @@ class ShowDownUser(models.Model):
 class Event(models.Model):
 	event_id = models.IntegerField()
 	venue = models.CharField(max_length=264)
+	display_name = models.CharField(max_length=264)
 	city = models.CharField(max_length=128)
 	date = models.DateField()
 	uri = models.CharField(max_length=264)
