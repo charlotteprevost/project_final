@@ -68,7 +68,7 @@ class PlaylistContainer extends Component {
 
 
     return(
-      <List>
+      <List inverted>
         <h1>PLAYLIST CONTAINER</h1>
         { user_playlists }
 

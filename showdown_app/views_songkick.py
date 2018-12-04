@@ -1,11 +1,18 @@
-from django.http import HttpResponseRedirect, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+import importlib.util
+spec = importlib.util.spec_from_file_location("secrets", "./secrets.py")
+secrets = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(secrets)
+
+from django.http import JsonResponse
+
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_protect
+from django.utils.decorators import method_decorator
+
 from django.forms.models import model_to_dict
-from django.shortcuts import render
-from django.conf import settings
 from django.db.models import Q
 
-from .models import Event
+from .models import Event, ShowDownUser
 
 from django.views import View                                   ## Django View class
 
@@ -21,41 +28,51 @@ from rest_framework import generics
 #     serializer_class = EventSerializer
 
 # Create your views here.
-class Events(View):
 
-	@csrf_exempt   					# CHEATING - DONT FORGET TO GET CORRECT CSRF-TOKENS/CORS HEADERS
-	def get_events(request):
+#######################################################################
+####################### GET ALL ARTISTS EVENTS ######################## Taken from state in React
+#######################################################################
 
-		if request.method == 'POST':
-			data = request.body.decode('utf-8')
-			data = json.loads(data) 
+def get_events(request):
 
-			r = requests.get('https://api.songkick.com/api/3.0/events.json?apikey=' + settings.SONGKICK_API_KEY + '&artist_name=' + data['artist'])
+	artist = request.GET.get('artist')
 
-			events = list(r.json().values())
+	r = requests.get('https://api.songkick.com/api/3.0/events.json?apikey=' + secrets.SONGKICK_API_KEY + '&artist_name=' + artist)
 
-			return JsonResponse({
-				'Content-Type': 'application/json',
-				'status': 200,
-				'data': events},
-				safe=False)
+	events = list(r.json().values())
+
+	return JsonResponse({
+		'Content-Type': 'application/json',
+		'status': 200,
+		'data': events},
+		safe=False)
 
 
-	@csrf_exempt   					# CHEATING - DONT FORGET TO GET CORRECT CSRF-TOKENS/CORS HEADERS
-	def add_event(request):
+#######################################################################
+################## CREATE EVENT - Add to PostgreSQL ################### 
+#######################################################################
 
-		if request.method == 'POST':
-			data = request.body.decode('utf-8')
-			data = json.loads(data)
-			print('---------------------------------------- data --------------------\n', data)		
-			try:
-				event_to_add = Event(event_id=data["event_id"], venue=data["venue"], city=data["city"], datetime=data["datetime"], uri=data["uri"], going=data["going"], maybe=data["maybe"])
-				print('---------------------------------------- event_to_add --------------------\n', event_to_add)
-				event_to_add.save()
-				print('')
-				return JsonResponse({"created": model_to_dict(event_to_add)}, safe=False)
-			except:
-				return JsonResponse({"Error": "Invalid Data"}, safe=False)
+@method_decorator(ensure_csrf_cookie)
+# @method_decorator(csrf_protect)
+def add_event(request):
+	print('---------------------------------------- request --------------------\n', request)		
+
+
+	data = request.body.decode('utf-8')
+	data = json.loads(data)
+	print('---------------------------------------- data --------------------\n', data)		
+	try:
+
+		showdown_user = ShowDownUser.objects.get(spotify_id=data["spotify_id"])
+
+
+		event_to_add = Event(event_id=data["event_id"], venue=data["venue"], city=data["city"], datetime=data["datetime"], uri=data["uri"], going=showdown_user, maybe=None)
+		print('---------------------------------------- event_to_add --------------------\n', event_to_add)
+		event_to_add.save()
+		print('')
+		return JsonResponse({"created": model_to_dict(event_to_add)}, safe=False)
+	except:
+		return JsonResponse({"Error": "Invalid Data"}, safe=False)
 
 
 

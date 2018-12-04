@@ -28,14 +28,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = secrets.SECRET_KEY
 
-# # Spotify
-# SPOTIFY_CLIENT_ID = secrets.SPOTIFY_CLIENT_ID
-
-# SPOTIFY_CLIENT_SECRET = secrets.SPOTIFY_CLIENT_SECRET
-
-# # Songkick
-# SONGKICK_API_KEY = secrets.SONGKICK_API_KEY
-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -49,25 +41,27 @@ CORS_ORIGIN_WHITELIST = [
     '127.0.0.1:3000',
 ]
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 INSTALLED_APPS = [
+    'corsheaders',
+    'showdown_app',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'showdown_app',
-    'rest_framework',
-    'frontend',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

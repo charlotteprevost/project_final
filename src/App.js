@@ -42,7 +42,8 @@ class App extends Component {
         spotify_id: ''
       },
       artists: [],
-      playlists: []
+      playlists: [],
+      calendar: []
     }
   }
 
@@ -56,7 +57,7 @@ class App extends Component {
       }
     });
     const tokensParsedJSON = await tokens.json();
-    console.log(`---------- tokensParsedJSON ----------\n`, tokensParsedJSON);
+    // console.log(`---------- tokensParsedJSON ----------\n`, tokensParsedJSON);
     return tokensParsedJSON.data
   }
 
@@ -147,33 +148,44 @@ class App extends Component {
         arrayOfStringFifties.push(stringOfFifties);                         // Add big string to array
         stringOfFifties = '';                                               // Empty big string
       } else if (i % 48 !== 0 && i !== 0) {                                 // Otherwise:
-        stringOfFifties = stringOfFifties + '%2C' + uniqueArtistsArray[i].id; // Concatenate
+        if (stringOfFifties === '') {
+          stringOfFifties = uniqueArtistsArray[i].id;
+        } else {
+          stringOfFifties = stringOfFifties + '%2C' + uniqueArtistsArray[i].id; // Concatenate
+        }
       }
     }
 
     console.log(`---------- arrayOfStringFifties ----------\n`, arrayOfStringFifties);
 
+    let artistsParsedJSON = null;
+
+    for (let i = 0; i < arrayOfStringFifties.length; i++) {
+
+      csrfCookie = getCookie('csrftoken');                                // New cookie?
+      const getArtists = await fetch('http://127.0.0.1:8000/artists/?access_token=' + this.state.spotify_tokens.access_token 
+                                        + '&ids=' + arrayOfStringFifties[i], {
+        'credentials': 'include',
+        headers: {
+          'X-CSRFToken': csrfCookie
+        }
+      });
+
+      // let artistsParsedJSON = await getArtists.json();
+      artistsParsedJSON = await getArtists.json();
+
+      // artistsParsedData = 
+
+      console.log(`---------- artistsParsedJSON ----------\n`, artistsParsedJSON);
 
 
-    csrfCookie = getCookie('csrftoken');                                // New cookie?
 
-    const getArtists = await fetch('http://127.0.0.1:8000/artists/?access_token=' + this.state.spotify_tokens.access_token 
-                                      + '&ids=' + arrayOfStringFifties[0], {
-      'credentials': 'include',
-      headers: {
-        'X-CSRFToken': csrfCookie
+      for (let j = 0; j < artistsParsedJSON.data.artists.length; j++) {
+        artistsDataFull.push(artistsParsedJSON.data.artists[j]);
       }
-    });
+    }
 
-    const artistsParsedJSON = await getArtists.json();
-
-    console.log(`---------- artistsParsedJSON.data ----------\n`, artistsParsedJSON.data);
-
-    // artistsDataFull.push
-
-    // const playlists = artistsParsedJSON.data;
-
-
+    console.log(`---------- artistsDataFull END ----------\n`, artistsDataFull);
 
     const newState = {
       user_profile: {
@@ -181,14 +193,28 @@ class App extends Component {
         spotify_display_name: spotifyProfileData.display_name,
         spotify_id: spotifyProfileData.id
       },
-      artists: [],
-      playlists: []
+      artists: artistsDataFull,
+      playlists: playlists
     }
 
+    return newState;   
+  }
 
+  createShowDownUser = async (user) => {
 
+    let csrfCookie = getCookie('csrftoken');
+    const createdUser = await fetch('http://127.0.0.1:8000/register/', {
+      method: 'POST',
+      body: JSON.stringify(user),
+      'credentials': 'include',
+      headers: {
+        'X-CSRFToken': csrfCookie,
+        'Content-Type': 'application/json'
+      }
+    });
+    const createdUserParsedJSON = await createdUser.json();
 
-    // return spotifyProfileParsedJSON.data    
+    console.log(`---------- createdUserParsedJSON ----------\n`, createdUserParsedJSON);
   }
 
   handleLogout = async (e) => {
@@ -225,6 +251,48 @@ class App extends Component {
     })
   }
 
+  addEvent = async (event, e) => {
+    e.preventDefault();
+
+    try {
+
+      const dataToSend = {
+        spotify_id: this.state.user_profile.spotify_id,
+        event_id: event.id,
+        venue: event.venue.display_name,
+        city: event.location.city,
+        datetime: event.start.datetime,
+        uri: event.uri
+      };
+      console.log(`---------- dataToSend ---------- \n `, dataToSend);
+
+      const csrfCookie = getCookie('csrftoken');
+      console.log(`---------- csrfCookie ---------- \n `, csrfCookie);
+
+      const createdEvent = await fetch('http://localhost:8000/event-new/', {
+        method: 'POST',
+        body: JSON.stringify(dataToSend),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfCookie
+        }
+      });
+
+      const createdEventParsed = await createdEvent.json();
+
+      console.log(`---------- createdEventParsed ---------- \n `, createdEventParsed);
+
+      // this.setState({
+      //   calendar: [...this.state.calendar, createdEventParsed.data]
+      // })
+
+    } catch(err) {
+      console.error(`Error: `, err);
+    }
+  }
+
+
   componentDidMount(){
     this.getSpotifyTokens().then(tokens => {
 
@@ -249,22 +317,21 @@ class App extends Component {
     console.log(`---------- this.state in componentDidUpdate ----------\n`, this.state)
     if (this.state.user_profile.spotify_display_name === ''){
 
-      this.getSpotifyData();
-      // .then(data => {
+      this.getSpotifyData().then(newState => {
 
-        // console.log(`---------- data ----------\n`, data)
+        console.log(`---------- newState ----------\n`, newState)
 
-        // this.setState({
-        //   user_profile: {
-        //     spotify_image: profile.images[0].url,
-        //     spotify_display_name: profile.display_name,
-        //     spotify_id: profile.id
-        //   }
-        // })
+        this.createShowDownUser(newState.user_profile);
 
-      // }).catch(err => {
-      //   console.error(`Error: `, err);
-      // });
+        this.setState({
+          user_profile: newState.user_profile,
+          artists: newState.artists,
+          playlists: newState.playlists
+        })
+
+      }).catch(err => {
+        console.error(`Error: `, err);
+      });
     }
   }
 
@@ -292,20 +359,21 @@ class App extends Component {
 
           <Route exact path="/events" render={ (props) => 
             <EventContainer {...props} 
-              spotify_tokens={this.state.spotify_tokens} 
-              handleTokens={this.handleTokens}
-              handlePlaylists={this.handlePlaylists}
-              handleArtists={this.handleArtists}
+              // spotify_tokens={this.state.spotify_tokens} 
+              // handleTokens={this.handleTokens}
+              // handlePlaylists={this.handlePlaylists}
+              // handleArtists={this.handleArtists}
               artists={this.state.artists}
+              addEvent={this.addEvent}
             />}
           />
 
           <Route exact path="/artists" render={ (props) => 
             <ArtistContainer {...props} 
-              spotify_tokens={this.state.spotify_tokens} 
-              handleTokens={this.handleTokens}
-              handlePlaylists={this.handlePlaylists}
-              handleArtists={this.handleArtists}
+              // spotify_tokens={this.state.spotify_tokens} 
+              // handleTokens={this.handleTokens}
+              // handlePlaylists={this.handlePlaylists}
+              // handleArtists={this.handleArtists}
               artists={this.state.artists}
             />}
           />
