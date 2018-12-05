@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^playlists/', get_playlists),                 # Spotify get playlists
     url(r'^profile/', get_profile),                     # Spotify get user profile
     url(r'^playlists-tracks/', playlists_tracks),       # Spotify get playlists, THEN songs THEN artists
-    url(r'^artists/', get_artists),          			# Spotify get artist
+    url(r'^artists/', get_artists),                     # Spotify get artist
+    re_path('.*', TemplateView.as_view(template_name='index.html'))
 
 ]
