@@ -1,7 +1,7 @@
 import os
 
 import importlib.util
-spec = importlib.util.spec_from_file_location("secrets", "./secrets.py")
+spec = importlib.util.spec_from_file_location("secrets", "../secrets.py")
 secrets = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(secrets)
 
