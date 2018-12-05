@@ -47,9 +47,9 @@ auth_query_parameters = {
     "client_id": CLIENT_ID
 }
 
-#######################################################################
-#################### PROMPT USER FOR AUTHORIZATION ####################
-#######################################################################
+#####################################################################################
+########################### PROMPT USER FOR AUTHORIZATION ###########################
+#####################################################################################
 
 def auth(self):
 
@@ -60,6 +60,7 @@ def auth(self):
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
     print('-------------------- auth_url --------------------\n', auth_url)
     return redirect(auth_url)
+
 
 #####################################################################################
 ################# REQUEST/REFRESH/SEND BACK TOKENS - GET PLAYLISTS ##################
@@ -102,6 +103,10 @@ def get_tokens(request):
 	}, safe=False)
 
 
+#####################################################################################
+########################### GET SPOTIFY USER'S PLAYLISTS ############################
+#####################################################################################
+
 def get_playlists(request):
 
 	access_token = request.GET.get('access_token')
@@ -131,6 +136,10 @@ def get_playlists(request):
 		}, safe=False)
 
 
+#####################################################################################
+########################## GET SPOTIFY USER PROFILE DETAILS #########################
+#####################################################################################
+
 def get_profile(request):
 
 	access_token = request.GET.get('access_token')
@@ -152,6 +161,10 @@ def get_profile(request):
 		'data': profile_data
 		}, safe=False)
 
+
+#####################################################################################
+############################# GET USER PLAYLISTS TRACKS #############################
+#####################################################################################
 
 def playlists_tracks(request):
 
@@ -175,22 +188,15 @@ def playlists_tracks(request):
 	playlist_data = json.loads(playlists_response.text)
 	playlist_data = sorted(playlist_data["items"], key=lambda playlist: playlist["name"])
 
-	# print('-------------------- playlist_data -------------------- \n', playlist_data)
-
 	playlists_api_endpoints = []
 	for playlist in playlist_data:
 		playlists_api_endpoints.append(playlist["href"])
-
-	# print('-------------------- playlists_api_endpoints -------------------- \n', playlists_api_endpoints)
 
 	playlists_tracks = []
 	for playlist_href in playlists_api_endpoints:
 		playlist_tracks_response = requests.get("{}/tracks?fields=items(track(name, href, artists(name, href, id)))".format(playlist_href), headers=authorization_header)
 		playlists_tracks_data = json.loads(playlist_tracks_response.text)
 		playlists_tracks.append(playlists_tracks_data)
-
-	print('-------------------- playlists_tracks -------------------- \n', playlists_tracks)
-
 
 	return JsonResponse({
 		'Content-Type': 'application/json',
@@ -199,48 +205,18 @@ def playlists_tracks(request):
 		}, safe=False)
 
 
+#####################################################################################
+########################### GET USER'S ARTISTS' DATA ###########################
+#####################################################################################
 
 def get_artists(request):
 
 	access_token = request.GET.get('access_token')
 	artists_ids = request.GET.get('ids')
-	
 	authorization_header = {"Authorization":"Bearer {}".format(access_token)}
-
-
-    #################### Get Artists Data ####################
-
 	artists_api_endpoint = "{}/artists?ids={}".format(SPOTIFY_API_URL, artists_ids)
-
 	artists_response = requests.get(artists_api_endpoint, headers=authorization_header)
-
 	artists_data = json.loads(artists_response.text)
-
-	# print('-------------------- artists_data -------------------- \n', artists_data)
-
- #    #################### Get User Playlist Data ####################
-
-	# playlist_api_endpoint = "{}/playlists/?limit=50".format(profile_data["href"])
-	# playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
-	# playlist_data = json.loads(playlists_response.text)
-	# playlist_data = sorted(playlist_data["items"], key=lambda playlist: playlist["name"])
-
-	# # print('-------------------- playlist_data -------------------- \n', playlist_data)
-
-	# playlists_api_endpoints = []
-	# for playlist in playlist_data:
-	# 	playlists_api_endpoints.append(playlist["href"])
-
-	# # print('-------------------- playlists_api_endpoints -------------------- \n', playlists_api_endpoints)
-
-	# playlists_tracks = []
-	# for playlist_href in playlists_api_endpoints:
-	# 	playlist_tracks_response = requests.get("{}/tracks?fields=items(track(name, href, artists(name, href, id)))".format(playlist_href), headers=authorization_header)
-	# 	playlists_tracks_data = json.loads(playlist_tracks_response.text)
-	# 	playlists_tracks.append(playlists_tracks_data)
-
-	# print('-------------------- playlists_tracks -------------------- \n', playlists_tracks)
-
 
 	return JsonResponse({
 		'Content-Type': 'application/json',

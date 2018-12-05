@@ -22,9 +22,7 @@ import json
 def get_events(request):
 
 	artist = request.GET.get('artist')
-
 	r = requests.get('https://api.songkick.com/api/3.0/events.json?apikey=' + secrets.SONGKICK_API_KEY + '&artist_name=' + artist)
-
 	events = list(r.json().values())
 
 	return JsonResponse({
@@ -56,11 +54,10 @@ def add_event(request):
 			going = 'going',
 			created_by = showdown_user
 		)
-		print('-------------------- event_to_add --------------------\n', event_to_add)
 
 		return JsonResponse({'data': model_to_dict(event_to_add)}, safe=False)
 	except:
-		return JsonResponse({'Error': 'Invalid Data from add_event'}, safe=False)
+		return JsonResponse({'error': 'Invalid Data from add_event'}, safe=False)
 
 
 #######################################################################
@@ -71,14 +68,17 @@ def get_user_events(request):
 
 	data = request.body.decode('utf-8')
 	data = json.loads(data)
-	print('-------------------- data --------------------\n', data)
 
-	showdown_user = ShowDownUser.objects.get(spotify_id=data['spotify_id'])
+	try: 
+		showdown_user = ShowDownUser.objects.get(spotify_id=data['spotify_id'])
 
-	event_list = list(Event.objects.filter(
-		(Q(going='going') | Q(going='maybe')),
-		created_by=showdown_user).values())
-	return JsonResponse({'data': event_list}, safe=False)
+		event_list = list(Event.objects.filter(
+			(Q(going='going') | Q(going='maybe')),
+			created_by=showdown_user).values())
+
+		return JsonResponse({'data': event_list}, safe=False)
+	except: 
+		return JsonResponse({'error': 'Invalid Data from get_user_events'}, safe=False)
 
 
 #######################################################################
@@ -88,7 +88,6 @@ def get_user_events(request):
 def edit_event(request, pk):
 	data = request.body.decode('utf-8')
 	data = json.loads(data)
-	print('-------------------- data --------------------\n', data)
 
 	try:
 		event_to_edit = Event.objects.get(pk = pk)
@@ -99,13 +98,11 @@ def edit_event(request, pk):
 				event_to_edit.going = data[key]
 
 		event_to_edit.save()
-
 		data['id'] = event_to_edit.id
-
 		return JsonResponse({'data': data}, safe=False)
 
 	except Event.DoesNotExist:
-		return JsonResponse({'error': 'Your event''s primary key doesn''t exist'}, safe=False)
+		return JsonResponse({'error': 'Event''s primary key doesn''t exist'}, safe=False)
 
 	except:
 		return JsonResponse({'error': 'Invalid Data'}, safe=False)

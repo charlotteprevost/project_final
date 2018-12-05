@@ -12,6 +12,8 @@ The point of the application is twofold:
 - Spreading live love
 - Encouraging users to create playlists relevant to their tastes
 
+---
+
 ## Users will be able to: ##
 - Login to their Spotify account (if not, will be prompted to register).
 - Add events to their calendar.
@@ -40,6 +42,72 @@ The point of the application is twofold:
 - Chronologically ascending list of Events appear.
 - User may choose to add a concert to their calendar by clicking “Add to Calendar.”
 
+---
+
+## Technologies Used: ##
+- PostgreSQL 11
+- Python 3.7 / Django 2.1.3
+- Node.js / React.js
+
+---
+
+## Setup: ##
+- Technologies above required
+- git fork/clone
+
+### In your CLI: ###
+- Navigate to root folder
+
+`$ npm install`
+- Create your virtual environment:
+
+```
+$ pip3 install virtualenv
+$ virtualenv .env -p python3
+$ source .env/bin/activate
+$ pip install -r requirements.txt
+```
+- Create a secrets.py file in the root directory. Inside, add your secrets/keys. Example secrets.py:
+
+```
+# Django Secret Key
+SECRET_KEY = 'yourdjangosecretstring'
+# DataBase Password
+DATABASE_PASSWORD = 'yourdatabasepassword'
+# Spotify
+SPOTIPY_CLIENT_ID = 'yourspotifyclientid'
+SPOTIPY_CLIENT_SECRET = 'yourspotifyclientsecret'
+# Songkick
+SONGKICK_API_KEY = 'yoursongkickapikey'
+```
+- After your secrets are all set up, run it
+
+`python manage.py runserver`
+
+- And finally go to http://127.0.0.1:8000/ 
+---
+
+## APIs: ##
+#### Songkick (pretty straightforward): ####
+- Request an API key on [their website](https://www.songkick.com/api_key_requests/new), they will email you with the key once they approve of your project.
+- The API endpoint used for this project was the ['Artist’s upcoming events (calendar)'](https://www.songkick.com/developer/upcoming-events-for-artist).
+
+#### Spotify (was a bit of a doozy): ####
+- [Login to/Create](https://developer.spotify.com/dashboard/login) your Spotify account.
+- Through your Spotify Dashboard, create a new App.
+- Retrieve Client ID and Client Secret from created App.
+- Scope for this project was playlist-modify-public playlist-modify-private (alter if needed in view_spotify.py)
+- API endpoints:
+	- [Get List of Current User's Playlists](https://developer.spotify.com/documentation/web-api/reference/playlists/get-a-list-of-current-users-playlists/)
+	- [Get a Playlist's Tracks](https://developer.spotify.com/documentation/web-api/reference/playlists/get-playlists-tracks/)
+
+---
+
+## Entity Relationship Diagram: ##
+
+<p style="text-align: center;"><img src="./wireframes/ERD.png" alt="User_Profile_Playlists"></p>
+
+---
 
 <h2 style="text-align: center;"> WIREFRAMES </h2>
 
@@ -51,13 +119,15 @@ The point of the application is twofold:
 <p style="text-align: center;"><img src="./wireframes/User_Profile_Concerts.png" alt="User_Profile_Concerts"></p>
 <p style="text-align: center;"><img src="./wireframes/User_Profile_Calendar.png" alt="User_Profile_Calendar"></p>
 
+---
+
 ### Upcoming Features: ###
 - Full Spotify functionality (user will be able to Create, Edit, Delete their Spotify playlists).
 - Optional concerts recommendations of artists similar to those in playlists.
 - Filter functionality for events based on city.
 - View details of concert/venue within ShowDown (no redirect).
 
-<h2 style="text-align: center;"> Upcoming Features Wireframes </h2>
+<h2 style="text-align: center;"> Upcoming Features' Wireframes </h2>
 
 <p style="text-align: center;"><img src="./wireframes/User_Profile_Playlist_New.png" alt="User_Profile_Playlist_New"></p>
 <p style="text-align: center;"><img src="./wireframes/User_Profile_Playlist_Edit.png" alt="User_Profile_Playlist_Edit"></p>

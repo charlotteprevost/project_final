@@ -2,10 +2,9 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path, re_path
 
-from showdown_app.views_songkick import get_events, add_event, edit_event, delete_event, get_user_events
+from showdown_app.views_events_songkick import get_events, add_event, edit_event, delete_event, get_user_events
 from showdown_app.views_spotify import auth, get_tokens, get_playlists, get_profile, playlists_tracks, get_artists
 from showdown_app.views_user import get_or_create_user
-# from django.views.generic import TemplateView
 
 urlpatterns = [
     path('events/<int:pk>/edit/', edit_event),          # PostgreSQL
