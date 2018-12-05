@@ -1,19 +1,15 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import { Segment, Header } from 'semantic-ui-react';
-// import serverURL from '../serverURL.js';
-
 
 const Home = (props) => {
 
 	return (
-		<Segment>
-			<Header as ='h2'>
-				Welcome to ShowDown!
-			</Header>
-
-		</Segment>
-	)
+	    <Segment>
+	    	<Header as='h1' textAlign='center'>Welcome to ShowDown!</Header>
+	    	<br/>
+	    	<Header as='h4' textAlign='center'> Get started by clicking on the links on the left.</Header>	
+	    </Segment>
+   	)
 }
 
 export default Home;

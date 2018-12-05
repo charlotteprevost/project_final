@@ -8,8 +8,6 @@ const statusOptions = [
 ];
 
 const CalendarEdit = (props) => {
-  console.log(props)
-	console.log(`---------- event from edit ----------\n`, props.eventToEdit);
   return (
     <Modal open={props.open}>
       <Header>Sooo... You comin'?</Header>

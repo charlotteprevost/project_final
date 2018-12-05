@@ -1,18 +1,12 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import { Segment, Header, Image } from 'semantic-ui-react';
-// import serverURL from '../serverURL.js';
-
 
 const ProfileContainer = (props) => {
 
 	return (
 		<Segment>
-			<Header as ='h2'>
-				<Image circular src={props.user_profile.spotify_image} /> 
-				{ props.user_profile.spotify_display_name }
-			</Header>
-
+			<Header as ='h2' textAlign='center'>{ props.user_profile.spotify_display_name }</Header>
+			<Image size='small' centered rounded src={props.user_profile.spotify_image} />
 		</Segment>
 	)
 }

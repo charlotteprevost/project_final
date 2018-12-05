@@ -1,57 +1,49 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
-import { Segment, Header, List, Button } from 'semantic-ui-react';
-// import serverURL from '../serverURL.js';
+import { Segment, Header, Grid, Divider, Label } from 'semantic-ui-react';
 
 
 const CalendarList = (props) => {
 
+  const user_events = props.calendar.map( userEvent => {
 
-    const user_events = props.calendar.map(userEvent => {
+    return (
+      <Grid.Row key={ userEvent.uri }>
+        <Grid.Column>
+          <Segment inverted>
 
-      let status = '';
-      if (userEvent.going === 'going') {
-        status = 'Going';
-      } else if (userEvent.going === 'maybe') {
-        status = 'Mmmmaybe...'
-      }
+          <Header>
+            <a href={ userEvent.uri }> { userEvent.display_name } </a>
+            <p>{ userEvent.date }</p>
+            <p>{ userEvent.city }</p>
+          </Header>
 
-      return (
-        <List.Item size='small' key={ userEvent.uri }>
-          <List.Content>
-            <List.Header>
-              <a href={ userEvent.uri }> { userEvent.display_name } </a>
-            </List.Header>
-          </List.Content>
-          <br/>
-          <List.Content>
-            { userEvent.city }
-          </List.Content>
-          <br/>
-          <List.Content>
-            { userEvent.date }
-          </List.Content>
-          <br/>
-          <List.Content>
-            Going?: { status }
-          </List.Content>
-          <br/>
-          <List.Content>
-            <Button color="green" onClick={props.openAndEdit.bind(null, userEvent)}>Edit Status</Button>
-          </List.Content>
+        <Divider/>
 
-        </List.Item>
-      )
-    })
+          { userEvent.going === 'going' ? (
+            <Label as='button' color='olive' ribbon onClick={props.openAndEdit.bind(null, userEvent)}>
+              Going
+            </Label>
+                ) : (
+            <Label as='button' color='yellow' ribbon onClick={props.openAndEdit.bind(null, userEvent)}>
+              Mmmmaybe...
+            </Label>
+            )
+          }
+          </Segment>
+        </Grid.Column>
+      </Grid.Row>
+
+    )
+  })
 
   return (
     <Segment>
-      <Header as ='h2'>
+      <Header as ='h2' textAlign='center'>
         My Events
       </Header>
-      <List >
+      <Grid>
         { user_events }
-      </List>
+      </Grid>
     </Segment>
   )
 }
