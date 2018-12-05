@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import getCookie from 'js-cookie';
-import { Segment, Dimmer, Loader, Image, Button, Form, Divider, Grid, Header, Dropdown } from 'semantic-ui-react';
+import { Segment, Dimmer, Loader, Image, Button, Form, Divider, Grid, Header } from 'semantic-ui-react';
 
 
-let cityOptions = []
+// let cityOptions = []
 
 class EventContainer extends Component {
 	constructor(){

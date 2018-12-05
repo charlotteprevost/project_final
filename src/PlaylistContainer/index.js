@@ -50,7 +50,7 @@ class PlaylistContainer extends Component {
         <List.Item size='small' key={ playlist.id }>
             { playlist_image }
             <List.Content>
-              <List.Header>
+              <List.Header style={{color: 'white'}}>
               { playlist.name }
               </List.Header>
             </List.Content>

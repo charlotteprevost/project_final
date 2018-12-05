@@ -80,11 +80,16 @@ SPOTIPY_CLIENT_SECRET = 'yourspotifyclientsecret'
 # Songkick
 SONGKICK_API_KEY = 'yoursongkickapikey'
 ```
-- After your secrets are all set up, run it
+- After your secrets are all set up, run your backend
 
 `python manage.py runserver`
 
-- And finally go to http://127.0.0.1:8000/ 
+- I a seperate tab, still in your root folder, run your frontend!
+
+`npm start`
+
+### You're in! ###
+
 ---
 
 ## APIs: ##
