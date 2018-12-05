@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path, re_path
+from django.views.generic import TemplateView
 
 from showdown_app.views_events_songkick import get_events, add_event, edit_event, delete_event, get_user_events
 from showdown_app.views_spotify import auth, get_tokens, get_playlists, get_profile, playlists_tracks, get_artists
