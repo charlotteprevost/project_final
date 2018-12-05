@@ -20,6 +20,25 @@ SECRET_KEY = secrets.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+ # STATIC_TMP = os.path.join(BASE_DIR, 'build/static')
+
+STATIC_URL = '/static/'
+
+# os.makedirs(STATIC_TMP, exist_ok=True)
+# os.makedirs(STATIC_ROOT, exist_ok=True)
+
+STATICFILES_DIRS = [
+  os.path.join(BASE_DIR, 'build/static'),
+]
+
+
 ALLOWED_HOSTS = ['https://show-down.herokuapp.com/', '127.0.0.1:8000']
 
 CORS_ALLOW_CREDENTIALS = True
@@ -128,22 +147,5 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
- # STATIC_TMP = os.path.join(BASE_DIR, 'build/static')
-
-STATIC_URL = '/static/'
-
-# os.makedirs(STATIC_TMP, exist_ok=True)
-# os.makedirs(STATIC_ROOT, exist_ok=True)
-
-STATICFILES_DIRS = [
-  os.path.join(BASE_DIR, 'build/static'),
-]
 
 django_heroku.settings(locals())
