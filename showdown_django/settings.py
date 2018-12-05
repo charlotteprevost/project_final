@@ -26,10 +26,12 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
     '127.0.0.1:3000',
+    'https://show-down.herokuapp.com/'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     '127.0.0.1:3000',
+    'https://show-down.herokuapp.com/'
 ]
 
 INSTALLED_APPS = [
