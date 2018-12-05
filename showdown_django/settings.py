@@ -1,7 +1,7 @@
 import os
 
 import importlib.util
-spec = importlib.util.spec_from_file_location("secrets", "../secrets.py")
+spec = importlib.util.spec_from_file_location("secrets", "./secrets.py")
 secrets = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(secrets)
 
@@ -24,12 +24,10 @@ ALLOWED_HOSTS = ['https://show-down.herokuapp.com/', '127.0.0.1:8000']
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
-    'localhost:3000',
     '127.0.0.1:3000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'localhost:3000',
     '127.0.0.1:3000',
 ]
 
@@ -58,10 +56,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'showdown_django.urls'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 TEMPLATES = [
     {
@@ -131,12 +125,21 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = 'build/static/'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_TMP = os.path.join(BASE_DIR, 'static')
+
+STATIC_URL = '/static/'
+
+os.makedirs(STATIC_TMP, exist_ok=True)
+os.makedirs(STATIC_ROOT, exist_ok=True)
 
 STATICFILES_DIRS = [
-  os.path.join(BASE_DIR, 'build/static'),
+  os.path.join(BASE_DIR, 'static'),
 ]
+
