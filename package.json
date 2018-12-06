@@ -35,7 +35,8 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-scripts": "2.1.1",
-    "weak-key": "^1.0.1"
+    "weak-key": "^1.0.1",
+    "webpack-bundle-tracker": "^0.4.2-beta"
   },
   "eslintConfig": {
     "extends": "react-app"

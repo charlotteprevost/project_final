@@ -37,6 +37,7 @@ CSRF_TRUSTED_ORIGINS = [
 INSTALLED_APPS = [
     'corsheaders',
     'showdown_app',
+    'webpack_loader',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,12 +59,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'showdown_django.urls'
 
+WEBPACK_LOADER = {
+    'DEFAULT': {
+            'BUNDLE_DIR_NAME': 'bundles/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
+        }
+}
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'build'),
+            # os.path.join(BASE_DIR, 'build'),
+            os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -135,7 +143,7 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 # STATIC_ROOT = os.path.join(BASE_DIR, '/staticfiles')
 STATIC_ROOT = os.path.join(BASE_DIR, '/build/static')
 
- # STATIC_TMP = os.path.join(BASE_DIR, 'build/static')
+# STATIC_TMP = os.path.join(BASE_DIR, 'build/static')
 
 STATIC_URL = '/static/'
 
