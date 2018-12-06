@@ -143,7 +143,7 @@ STATIC_URL = '/static/'
 # os.makedirs(STATIC_ROOT, exist_ok=True)
 
 STATICFILES_DIRS = [
-  os.path.join(BASE_DIR, '/build/static'),
+  os.path.join(BASE_DIR, 'build/static'),
 ]
 
 
