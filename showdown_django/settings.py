@@ -58,7 +58,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'showdown_django.urls'
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 TEMPLATES = [
     {
@@ -143,7 +142,7 @@ STATIC_URL = '/static/'
 # os.makedirs(STATIC_ROOT, exist_ok=True)
 
 STATICFILES_DIRS = [
-  os.path.join(BASE_DIR, 'build/static'),
+  os.path.join(BASE_DIR, 'charlotteprevost/project_final/build/static'),
 ]
 
 
