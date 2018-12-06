@@ -6,28 +6,8 @@ spec = importlib.util.spec_from_file_location("secrets", "./secrets.py")
 secrets = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(secrets)
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
- # STATIC_TMP = os.path.join(BASE_DIR, 'build/static')
-
-STATIC_URL = '/static/'
-
-# os.makedirs(STATIC_TMP, exist_ok=True)
-# os.makedirs(STATIC_ROOT, exist_ok=True)
-
-STATICFILES_DIRS = [
-  os.path.join(BASE_DIR, 'build/static'),
-]
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -38,7 +18,6 @@ SECRET_KEY = secrets.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
 
 
 ALLOWED_HOSTS = ['https://show-down.herokuapp.com/', '127.0.0.1:8000']
@@ -148,6 +127,24 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+STATIC_ROOT = os.path.join(BASE_DIR, '/staticfiles')
+
+ # STATIC_TMP = os.path.join(BASE_DIR, 'build/static')
+
+STATIC_URL = '/static/'
+
+# os.makedirs(STATIC_TMP, exist_ok=True)
+# os.makedirs(STATIC_ROOT, exist_ok=True)
+
+STATICFILES_DIRS = [
+  os.path.join(BASE_DIR, '/build/static'),
+]
 
 
 django_heroku.settings(locals())
