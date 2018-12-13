@@ -32,7 +32,6 @@ const CalendarList = (props) => {
           </Segment>
         </Grid.Column>
       </Grid.Row>
-
     )
   })
 

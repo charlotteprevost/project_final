@@ -93,6 +93,7 @@ class App extends Component {
         'X-CSRFToken': csrfCookie
       }
     });
+
     const spotifyProfileParsedJSON = await spotifyProfile.json();
     console.log(`---------- spotifyProfileParsedJSON.data ----------\n`, spotifyProfileParsedJSON.data);
 
@@ -100,8 +101,7 @@ class App extends Component {
 
     // ------------------------------------- GET PLAYLISTS DATA ------------------------------------- //
 
-    csrfCookie = getCookie('csrftoken');                                        // New cookie
-
+    csrfCookie = getCookie('csrftoken');
     const getPlaylists = await fetch(
       'http://127.0.0.1:8000/playlists-tracks/?access_token=' 
       + this.state.spotify_tokens.access_token, {
@@ -193,8 +193,9 @@ class App extends Component {
 
       for (let j = 0; j < artistsParsedJSON.data.artists.length; j++) {
         artistsDataFull.push(artistsParsedJSON.data.artists[j]);
+        }
       }
-    }
+
 
     // ------------------------------------- GET CALENDAR DATA ------------------------------------- //
 
@@ -211,6 +212,13 @@ class App extends Component {
     const calendarResponseParsedJSON = await calendarResponse.json();
 
     const calendarResponseData = calendarResponseParsedJSON.data
+
+    calendarResponseData.sort(function (a, b) {                      // Sort Events by date ascending
+      a = a.date.split('-');                                         // 'YYYY-MM-DD'.split('/')
+      b = b.date.split('-');                                         // gives ["YYYY", "MM", "DD"]
+      return a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+    });
+
 
     // -------------- Consolidate what will be new state -------------- //
 
@@ -250,7 +258,7 @@ class App extends Component {
   }
 
   handleLogout = async (e) => {
-    e.preventDefault();                                        //Will be used with Sessions
+    e.preventDefault();                                        // Will be used with Sessions
     this.props.history.push('/')                               // For now redirect to Spotify Login
   }
 
@@ -371,6 +379,12 @@ class App extends Component {
           const calendarResponseParsedJSON = await calendarResponse.json();
           const calendarResponseData = calendarResponseParsedJSON.data
 
+          calendarResponseData.sort(function (a, b) {                      // Sort Events by date ascending
+            a = a.date.split('-');                                         // 'YYYY-MM-DD'.split('/')
+            b = b.date.split('-');                                         // gives ["YYYY", "MM", "DD"]
+            return a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+          });
+
           this.setState({
             showEditModal: false,
             calendar: calendarResponseData
@@ -383,7 +397,6 @@ class App extends Component {
   }
 
   openAndEdit = (eventFromCalendar) => {
-    // console.log(`----------- eventFromCalendar -----------\n`, eventFromCalendar);
     this.setState({
       showEditModal: true,
       eventToEdit: {
@@ -395,21 +408,16 @@ class App extends Component {
   eventDelete = async (id) => {
 
     const csrfCookie = getCookie('csrftoken');
-
-    const eventDeleteResponse = await fetch('http://127.0.0.1:8000/events/' + id + '/delete/', 
-      {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfCookie
-        }
+    const eventDeleteResponse = await fetch('http://127.0.0.1:8000/events/' + id + '/delete/', {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfCookie
       }
-    );
+    });
 
     const eventDeleteParsed = await eventDeleteResponse;
-
-    console.log(`---------- eventDeleteParsed ----------\n`, eventDeleteParsed)
 
     this.setState({
       showEditModal: false,
@@ -418,10 +426,10 @@ class App extends Component {
   }
 
   componentDidMount(){
+
     this.getSpotifyTokens().then(tokens => {
 
-    console.log(`---------- tokens ----------\n`, tokens);
-
+      console.log(`---------- tokens ----------\n`, tokens);
       this.setState({
         spotify_tokens:{
           access_token: tokens.access_token,
@@ -431,7 +439,6 @@ class App extends Component {
           token_type: tokens.token_type
         }
       });
-
     }).catch((err) => {
       console.error(`---------- Error: ----------\n`, err);
     });
@@ -443,7 +450,6 @@ class App extends Component {
       this.getData().then(newState => {
 
         this.createShowDownUser(newState.user_profile);
-        console.log(`newState:`, newState);
 
         this.setState({
           user_profile: newState.user_profile,

@@ -4,6 +4,7 @@ import { Grid, Segment, Image, List } from 'semantic-ui-react';
 export default class ArtistContainer extends Component {            // 'Dumb' Component, only renders Artists
 
   render() {
+    console.log(`Number of artists: `, this.props.artists.length);
 
     const artists_list = this.props.artists.map((artist, i) => {
 

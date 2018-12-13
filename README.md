@@ -1,6 +1,6 @@
 <h1 style="text-align: center;"> —---— SHOWDOWN —---— </h1>
 
-The idea for this app came to me when I realized that my “Spotify Artists” did not include artists appearing only in one of my playlists (Spotify generates a users Artists list based on whether the user A- has saved a song from the artist, or B- is following the artist)
+The idea for this app came to me when I realized that my “Spotify Artists” did not include artists appearing only in one of my playlists (Spotify generates a users Artists list only based on whether the user has saved a song from the artist)
 
 Although brilliant in many ways, Spotify also does not offer the user the ability to view all upcoming concerts of all said user's artists in one place (the user has to instead already know what specific Artist's concerts they wish to look up).
 

@@ -18,8 +18,10 @@ class EventContainer extends Component {
 
     const allEvents = []
 
-    for (let i = 0; i < this.props.artists.length; i++) {                           // Use for loop to get ALL Events of ALL Artists
+    for (let i = 0; i < 100; i++) {                           // Use for loop to get ALL Events of ALL Artists
       if (this.props.artists[i] !== null && this.state.events.length === 0) {
+
+        console.log('---------- artist['+i+'] scanned ----------\n', this.props.artists[i].name);
 
         const csrfCookie = getCookie('csrftoken');
         const events = await fetch(
@@ -34,8 +36,11 @@ class EventContainer extends Component {
         const eventsParsedJSON = await events.json();
         const eventsParsedData = eventsParsedJSON.data[0].results.event
 
+
         if (eventsParsedData !== undefined) {
           for (let j = 0; j < eventsParsedData.length; j++) {
+
+            console.log('---------- events: \n', eventsParsedData[j]);
             allEvents.push(eventsParsedData[j])
           } 
         }
@@ -47,8 +52,6 @@ class EventContainer extends Component {
       b = b.start.date.split('-');                        // gives ["YYYY", "MM", "DD"]
       return a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
     });
-
-    console.log(`---------- allEvents sorted by date ----------\n`, allEvents);
 
     return allEvents  
   }
@@ -126,7 +129,7 @@ class EventContainer extends Component {
              <Image src='https://react.semantic-ui.com/images/wireframe/short-paragraph.png' /><br/>
            </Segment> 
           ) : (
-            <Grid columns={3}>
+            <Grid>
               { user_events }
             </Grid>
           )   
