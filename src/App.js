@@ -99,6 +99,14 @@ class App extends Component {
 
     const spotifyProfileData = spotifyProfileParsedJSON.data
 
+    const userProfile = {
+      spotify_image: spotifyProfileData.images[0].url,
+      spotify_display_name: spotifyProfileData.display_name,
+      spotify_id: spotifyProfileData.id
+    }
+
+    this.createShowDownUser(userProfile);
+
     // ------------------------------------- GET PLAYLISTS DATA ------------------------------------- //
 
     csrfCookie = getCookie('csrftoken');
@@ -210,6 +218,7 @@ class App extends Component {
       }
     });
     const calendarResponseParsedJSON = await calendarResponse.json();
+    console.log(`---------- calendarResponseParsedJSON ----------\n`, calendarResponseParsedJSON);
 
     const calendarResponseData = calendarResponseParsedJSON.data
 
@@ -235,10 +244,6 @@ class App extends Component {
 
     return newState;   
   }
-
-  // -------------------------------------------------------------------------------------------------- //
-  // --------------------------- Create ShowDownUser after initial setState --------------------------- //
-  // -------------------------------------------------------------------------------------------------- //
 
   createShowDownUser = async (user) => {
 
@@ -449,7 +454,7 @@ class App extends Component {
 
       this.getData().then(newState => {
 
-        this.createShowDownUser(newState.user_profile);
+        // this.createShowDownUser(newState.user_profile);
 
         this.setState({
           user_profile: newState.user_profile,

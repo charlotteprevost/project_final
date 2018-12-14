@@ -18,7 +18,7 @@ class EventContainer extends Component {
 
     const allEvents = []
 
-    for (let i = 0; i < 100; i++) {                           // Use for loop to get ALL Events of ALL Artists
+    for (let i = 0; i < this.props.artists.length; i++) {                           // Use for loop to get ALL Events of ALL Artists
       if (this.props.artists[i] !== null && this.state.events.length === 0) {
 
         console.log('---------- artist['+i+'] scanned ----------\n', this.props.artists[i].name);

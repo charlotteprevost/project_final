@@ -11,7 +11,7 @@ def get_or_create_user(request):
 	data = request.body.decode('utf-8')
 	data = json.loads(data)
 
-	print('-------------------- data --------------------\n', data)
+	print('-------------------- data from get_or_create_user --------------------\n', data)
 	
 	try:
 		obj, created = ShowDownUser.objects.get_or_create( 			# If ShowDownUser doesn't already exist, create it
@@ -20,9 +20,9 @@ def get_or_create_user(request):
 			spotify_image = data["spotify_image"],
 		)
 
-		# obj.save()
+		obj.save()
 
-		print('-------------------- obj --------------------\n', obj)		
+		print('-------------------- obj from get_or_create_user --------------------\n', obj)		
 
 		return JsonResponse({"data": "Success!"}, safe=False)
 	except: 

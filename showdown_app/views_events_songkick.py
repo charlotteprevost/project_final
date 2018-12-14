@@ -68,13 +68,17 @@ def get_user_events(request):
 
 	data = request.body.decode('utf-8')
 	data = json.loads(data)
+	print('---------- data: ----------\n', data)
 
 	try: 
 		showdown_user = ShowDownUser.objects.get(spotify_id=data['spotify_id'])
+		print('---------- showdown_user: ----------\n', showdown_user)
 
 		event_list = list(Event.objects.filter(
 			(Q(going='going') | Q(going='maybe')),
 			created_by=showdown_user).values())
+
+		print('---------- event_list: ----------\n', event_list)		
 
 		return JsonResponse({'data': event_list}, safe=False)
 	except: 

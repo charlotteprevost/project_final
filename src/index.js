@@ -1,20 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import 'semantic-ui-css/semantic.min.css';
-import './index.css';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
-import * as serviceWorker from './serviceWorker';
-// We have to wrap our whole application in the BrowserRouter
-// To allow every part of app to use the routes methods
+require('./style.css');
 
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById('root'));
+const favicon = require('./assets/favicon.png');
+let link = document.createElement('link');
+link.type = 'image/png';
+link.rel = 'shortcut icon';
+link.href = favicon;
+document.head.appendChild(link);
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+let title = document.createElement('h1');
+title.innerText = 'Hello Wepack';
+document.body.appendChild(title);
