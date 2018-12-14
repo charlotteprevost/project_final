@@ -4,7 +4,7 @@ import serverURL from '../serverURL.js';
 
 const Login = (props) => {
 
-	const loginURL = serverURL + 'login/';
+	const loginURL = serverURL + '/login/';
 
 	return (
 		<div >
