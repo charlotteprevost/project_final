@@ -98,6 +98,7 @@ def get_tokens(request):
 	token_type = response_data["token_type"]
 	expires_in = response_data["expires_in"]
 
+	print('-------------------- response_data --------------------\n', response_data)
 	return JsonResponse({
 		'Content-Type': 'application/json',
 		'status': 200,
