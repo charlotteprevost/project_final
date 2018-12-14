@@ -127,14 +127,16 @@ class App extends Component {
     let artistsArray = [];
 
     for (let i = 0; i < playlists.length; i++) {
-      for (let j = 0; j < playlists[i].items.length; j++) {
-        for (let k = 0; k < playlists[i].items[j].track.artists.length; k++) {
-          const artist = {
-            name: playlists[i].items[j].track.artists[k].name,
-            href: playlists[i].items[j].track.artists[k].href,
-            id: playlists[i].items[j].track.artists[k].id
+      if (playlists[i].items !== undefined) {
+        for (let j = 0; j < playlists[i].items.length; j++) {
+          for (let k = 0; k < playlists[i].items[j].track.artists.length; k++) {
+            const artist = {
+              name: playlists[i].items[j].track.artists[k].name,
+              href: playlists[i].items[j].track.artists[k].href,
+              id: playlists[i].items[j].track.artists[k].id
+            }
+            artistsArray.push(artist)
           }
-          artistsArray.push(artist)
         }
       }
     }
