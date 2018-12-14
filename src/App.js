@@ -19,6 +19,8 @@ import { Grid } from 'semantic-ui-react';
 import getCookie from 'js-cookie';
 import queryString from 'query-string'
 
+import serverURL from './serverURL.js';
+
 
 const My404 = () => {
   return (
@@ -65,7 +67,7 @@ class App extends Component {
     const csrfCookie = getCookie('csrftoken');
     const values = queryString.parse(this.props.location.search)
     const tokens = await fetch(
-      'http://127.0.0.1:8000/tokens/?code=' + values.code, {
+      serverURL + '/tokens/?code=' + values.code, {
         'credentials': 'include',
         headers: {
           'X-CSRFToken': csrfCookie
@@ -87,7 +89,7 @@ class App extends Component {
     // ------------------------------------- GET PROFILE DATA ------------------------------------- //
 
     let csrfCookie = getCookie('csrftoken');
-    const spotifyProfile = await fetch('http://127.0.0.1:8000/profile/?access_token=' + this.state.spotify_tokens.access_token, {
+    const spotifyProfile = await fetch(serverURL + '/profile/?access_token=' + this.state.spotify_tokens.access_token, {
       'credentials': 'include',
       headers: {
         'X-CSRFToken': csrfCookie
@@ -111,7 +113,7 @@ class App extends Component {
 
     csrfCookie = getCookie('csrftoken');
     const getPlaylists = await fetch(
-      'http://127.0.0.1:8000/playlists-tracks/?access_token=' 
+      serverURL + '/playlists-tracks/?access_token=' 
       + this.state.spotify_tokens.access_token, {
         'credentials': 'include',
         headers: {
@@ -188,7 +190,7 @@ class App extends Component {
 
       csrfCookie = getCookie('csrftoken'); 
       const getArtists = await fetch(
-        'http://127.0.0.1:8000/artists/?access_token=' 
+        serverURL + '/artists/?access_token=' 
           + this.state.spotify_tokens.access_token 
           + '&ids=' + arrayOfStringFifties[i], {
             'credentials': 'include',
@@ -210,7 +212,7 @@ class App extends Component {
     // ------------------------------------- GET CALENDAR DATA ------------------------------------- //
 
     csrfCookie = getCookie('csrftoken');
-    const calendarResponse = await fetch('http://127.0.0.1:8000/calendar/', {
+    const calendarResponse = await fetch(serverURL + '/calendar/', {
       method: 'POST',
       body: JSON.stringify({spotify_id: spotifyProfileData.id}),
       credentials: 'include',
@@ -250,7 +252,7 @@ class App extends Component {
   createShowDownUser = async (user) => {
 
     let csrfCookie = getCookie('csrftoken');
-    const createdUser = await fetch('http://127.0.0.1:8000/register/', {
+    const createdUser = await fetch(serverURL + '/register/', {
       method: 'POST',
       body: JSON.stringify(user),
       'credentials': 'include',
@@ -297,7 +299,7 @@ class App extends Component {
       };
 
       const csrfCookie = getCookie('csrftoken');
-      const createdEvent = await fetch('http://127.0.0.1:8000/event-new/', {
+      const createdEvent = await fetch(serverURL + '/event-new/', {
         method: 'POST',
         body: JSON.stringify(dataToSend),
         credentials: 'include',
@@ -349,7 +351,7 @@ class App extends Component {
 
           let csrfCookie = getCookie('csrftoken');
           const editResponse = await fetch(
-            'http://127.0.0.1:8000/events/' + this.state.eventToEdit.id + '/edit/', {
+            serverURL + '/events/' + this.state.eventToEdit.id + '/edit/', {
               method: 'PUT',
               credentials: 'include',
               body: JSON.stringify({
@@ -373,7 +375,7 @@ class App extends Component {
           // ------------------ API Call for accurate new state ------------------- //
 
           csrfCookie = getCookie('csrftoken');
-          const calendarResponse = await fetch('http://127.0.0.1:8000/calendar/', {
+          const calendarResponse = await fetch(serverURL + '/calendar/', {
             method: 'POST',
             body: JSON.stringify({spotify_id: this.state.user_profile.spotify_id}),
             credentials: 'include',
@@ -415,7 +417,7 @@ class App extends Component {
   eventDelete = async (id) => {
 
     const csrfCookie = getCookie('csrftoken');
-    const eventDeleteResponse = await fetch('http://127.0.0.1:8000/events/' + id + '/delete/', {
+    const eventDeleteResponse = await fetch(serverURL + '/events/' + id + '/delete/', {
       method: 'DELETE',
       credentials: 'include',
       headers: {

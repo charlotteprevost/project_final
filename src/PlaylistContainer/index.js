@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import getCookie from 'js-cookie';
 import { List, Image } from 'semantic-ui-react';
 
+import serverURL from '../serverURL.js';
+
 class PlaylistContainer extends Component {
 	constructor(){
     super();
@@ -13,7 +15,7 @@ class PlaylistContainer extends Component {
   getPlaylists = async () => {
     const csrfCookie = getCookie('csrftoken');
     const playlists = await fetch(
-      'http://127.0.0.1:8000/playlists/?access_token=' 
+      serverURL + '/playlists/?access_token=' 
         + this.props.spotify_tokens.access_token, {
           'credentials': 'include',
           headers: {

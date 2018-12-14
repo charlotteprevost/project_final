@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import getCookie from 'js-cookie';
 import { Segment, Dimmer, Loader, Image, Button, Form, Divider, Grid, Header } from 'semantic-ui-react';
 
+import serverURL from '../serverURL.js';
 
 // let cityOptions = []
 
@@ -25,7 +26,7 @@ class EventContainer extends Component {
 
         const csrfCookie = getCookie('csrftoken');
         const events = await fetch(
-          'http://127.0.0.1:8000/events/?artist=' + this.props.artists[i].name, {
+          serverURL + '/events/?artist=' + this.props.artists[i].name, {
             'method': 'POST',
             'credentials': 'include',
             headers: {
