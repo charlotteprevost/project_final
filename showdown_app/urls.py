@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^calendar/', get_user_events),                # PostgreSQL
     url(r'^event-new/', add_event),                     # PostgreSQL
     url(r'^register/', get_or_create_user),             # PostgreSQL    
-    url(r'^login/', auth),                              # Spotify authorization URL
+    url(r'^backend/login/', auth),                              # Spotify authorization URL
     url(r'^tokens/', get_tokens),                       # Spotify get tokens
     url(r'^playlists/', get_playlists),                 # Spotify get playlists
     url(r'^profile/', get_profile),                     # Spotify get user profile
