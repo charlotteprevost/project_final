@@ -9,8 +9,6 @@ spec.loader.exec_module(secrets)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 # Quick-start development settings - unsuitable for production
@@ -19,12 +17,11 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = secrets.SECRET_KEY
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOWED_HOSTS = ['show-down.herokuapp.com/', '127.0.0.1:8000']
 
-ALLOWED_HOSTS = ['https://show-down.herokuapp.com/', '127.0.0.1:8000']
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -38,10 +35,11 @@ CSRF_TRUSTED_ORIGINS = [
     'https://show-down.herokuapp.com/'
 ]
 
+
 INSTALLED_APPS = [
     'corsheaders',
     'showdown_app',
-    'webpack_loader',
+    # 'webpack_loader',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,8 +66,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # os.path.join(BASE_DIR, 'build'),
-            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'build'),
+            # os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -136,18 +134,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+  os.path.join(BASE_DIR, 'build/static'),
+]
+  # os.path.join(BASE_DIR, 'assets'),
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 
 # STATIC_ROOT = os.path.join(BASE_DIR, '/build/static')
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # STATIC_TMP = os.path.join(BASE_DIR, 'build/static')
-# STATIC_URL = '/static/'
 # os.makedirs(STATIC_TMP, exist_ok=True)
 # os.makedirs(STATIC_ROOT, exist_ok=True)
 
-# STATICFILES_DIRS = [
-  # os.path.join(BASE_DIR, 'build/static'),
-  # os.path.join(BASE_DIR, 'assets'),
-# ]
 
 
 django_heroku.settings(locals())
