@@ -71,6 +71,7 @@ def auth(self):
 def get_tokens(request):
 
     #################### Spotify Authorization Code Flow - Step 4: Requests Refresh and Access Tokens ####################
+	print('-------------------- request --------------------\n', request)
 
 	auth_token = request.GET.get('code')
 	print('-------------------- auth_token --------------------\n', auth_token)
