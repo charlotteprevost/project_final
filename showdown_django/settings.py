@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = secrets.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['show-down.herokuapp.com/', '127.0.0.1:8000']
 
@@ -37,15 +37,15 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 INSTALLED_APPS = [
-    'corsheaders',
-    'showdown_app',
-    # 'webpack_loader',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'showdown_app',
+    # 'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -94,7 +94,8 @@ DATABASES = {
         'NAME': 'showdown',
         'USER': 'showdownuser',
         'PASSWORD': secrets.DATABASE_PASSWORD,
-        'HOST': '127.0.0.1',
+        # 'HOST': '127.0.0.1',
+        # 'HOST': 'https://show-down.herokuapp.com/backend',
     }
 }
 
