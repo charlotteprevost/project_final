@@ -65,7 +65,8 @@ class App extends Component {
 
   getSpotifyTokens = async (props) => {
     const csrfCookie = getCookie('csrftoken');
-    const values = queryString.parse(this.props.location.search)
+    const values = queryString.parse(this.props.location.search);
+    console.log(`---------- values ----------`, values);
     const tokens = await fetch(
       serverURL + '/tokens/?code=' + values.code, {
         'credentials': 'include',
@@ -73,7 +74,9 @@ class App extends Component {
           'X-CSRFToken': csrfCookie
         }
     });
+    console.log(`---------- tokens in getSpotifyTokens ----------`, tokens);
     const tokensParsedJSON = await tokens.json();
+    console.log(`---------- tokensParsedJSON ----------`, tokensParsedJSON);
     return tokensParsedJSON.data
   }
 
@@ -322,7 +325,7 @@ class App extends Component {
       }
 
     } catch(err) {
-      console.error(`Error: `, err);
+      console.error(`Error in addEvent: \n`, err);
     }
   }
 
@@ -401,7 +404,7 @@ class App extends Component {
         }
 
     } catch(err){
-      console.error(`Error: `, err)
+      console.error(`Error in closeAndEdit: \n`, err)
     }
   }
 
@@ -449,7 +452,8 @@ class App extends Component {
         }
       });
     }).catch((err) => {
-      console.error(`---------- Error: ----------\n`, err);
+      // console.warn(`jqxhr.responseText in componentDidMount: \n`, jqxhr.responseText)
+      console.error(`---------- Error in componentDidMount ----------\n`, err);
     });
   }
 
@@ -468,7 +472,7 @@ class App extends Component {
         })
 
       }).catch(err => {
-        console.error(`Error: `, err);
+        console.error(`Error in componentDidUpdate: \n`, err);
       });
     }
   }
