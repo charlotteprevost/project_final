@@ -101,6 +101,7 @@ def get_tokens(request):
 	print('-------------------- response_data --------------------\n', response_data)
 	return JsonResponse({
 		'Content-Type': 'application/json',
+		'Accept': 'application/json',
 		'status': 200,
 		'data': response_data
 	}, safe=False)
