@@ -136,6 +136,7 @@ def get_playlists(request):
 
 	return JsonResponse({
 		'Content-Type': 'application/json',
+		'Accept': 'application/json',
 		'status': 200,
 		'data': playlist_data
 		}, safe=False)
@@ -162,6 +163,7 @@ def get_profile(request):
 
 	return JsonResponse({
 		'Content-Type': 'application/json',
+		'Accept': 'application/json',
 		'status': 200,
 		'data': profile_data
 		}, safe=False)
@@ -205,6 +207,7 @@ def playlists_tracks(request):
 
 	return JsonResponse({
 		'Content-Type': 'application/json',
+		'Accept': 'application/json',
 		'status': 200,
 		'data': playlists_tracks
 		}, safe=False)
@@ -225,6 +228,7 @@ def get_artists(request):
 
 	return JsonResponse({
 		'Content-Type': 'application/json',
+		'Accept': 'application/json',
 		'status': 200,
 		'data': artists_data
 		}, safe=False)

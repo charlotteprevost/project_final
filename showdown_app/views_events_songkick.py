@@ -27,6 +27,7 @@ def get_events(request):
 
 	return JsonResponse({
 		'Content-Type': 'application/json',
+		'Accept': 'application/json',
 		'status': 200,
 		'data': events},
 		safe=False)
