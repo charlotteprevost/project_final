@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = secrets.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['show-down.herokuapp.com/', '127.0.0.1:8000']
 
@@ -28,11 +28,13 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     'show-down.herokuapp.com',
     '127.0.0.1:3000',
+    'localhost:3000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'show-down.herokuapp.com',
     '127.0.0.1:3000',
+    'localhost:3000',
 ]
 
 

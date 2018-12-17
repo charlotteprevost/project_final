@@ -255,6 +255,7 @@ class App extends Component {
   createShowDownUser = async (user) => {
 
     let csrfCookie = getCookie('csrftoken');
+    console.log(`---------- csrfCookie from createShowDownUser ----------\n`, csrfCookie);
     const createdUser = await fetch(serverURL + '/register/', {
       method: 'POST',
       body: JSON.stringify(user),
