@@ -67,6 +67,7 @@ class App extends Component {
     const csrfCookie = getCookie('csrftoken');
     const values = queryString.parse(this.props.location.search);
     console.log(`---------- values ----------`, values);
+    console.log(`---------- csrfCookie from getSpotifyTokens ----------\n`, csrfCookie);
     const tokens = await fetch(
       serverURL + '/tokens/?code=' + values.code, {
         'credentials': 'include',
