@@ -10,7 +10,6 @@ spec.loader.exec_module(secrets)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -21,7 +20,6 @@ SECRET_KEY = secrets.SECRET_KEY
 DEBUG = True
 
 ALLOWED_HOSTS = ['show-down.herokuapp.com/', '127.0.0.1:8000']
-
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -36,7 +34,6 @@ CSRF_TRUSTED_ORIGINS = [
     '127.0.0.1:3000',
     'localhost:3000',
 ]
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
