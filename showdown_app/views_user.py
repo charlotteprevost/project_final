@@ -15,18 +15,24 @@ def get_or_create_user(request):
 	
 	try:
 		obj, created = ShowDownUser.objects.get_or_create( 			# If ShowDownUser doesn't already exist, create it
-			spotify_display_name = data["spotify_display_name"],
-			spotify_id = data["spotify_id"],
-			spotify_image = data["spotify_image"],
+			spotify_display_name = data['spotify_display_name'],
+			spotify_id = data['spotify_id'],
+			spotify_image = data['spotify_image'],
 		)
 
 		obj.save()
 
 		print('-------------------- obj from get_or_create_user --------------------\n', obj)		
 
-		return JsonResponse({"data": "Success!"}, safe=False)
+		# return JsonResponse({'data': 'Success!'}, safe=False)
+		return JsonResponse({
+			'Content-Type': 'application/json',
+			'Accept': 'application/json',
+			'status': 200,
+			'data': 'Success!'},
+			safe=False)
 	except: 
-		return JsonResponse({"Error": "Invalid Data"}, safe=False)
+		return JsonResponse({'Error': 'Invalid Data'}, safe=False)
 
 
 
