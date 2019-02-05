@@ -35,7 +35,7 @@ CSRF_TRUSTED_ORIGINS = [
     'localhost:3000',
 ]
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = True
 
 INSTALLED_APPS = [
@@ -51,9 +51,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

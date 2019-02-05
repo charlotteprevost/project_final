@@ -64,10 +64,13 @@ class App extends Component {
   // -------------------------------------------------------------------------------------------------- //
 
   getSpotifyTokens = async (props) => {
+
     const csrfCookie = getCookie.get('csrftoken');
+    console.log(`---------- csrfCookie from getSpotifyTokens ---------- \n`, csrfCookie);
+
     const values = queryString.parse(this.props.location.search);
     console.log(`---------- values ----------`, values);
-    console.log(`---------- csrfCookie from getSpotifyTokens ---------- \n`, csrfCookie);
+    
     const tokens = await fetch(
       serverURL + '/tokens/?code=' + values.code, {
         'credentials': 'include',
@@ -262,8 +265,8 @@ class App extends Component {
       body: JSON.stringify(user),
       'credentials': 'include',
       headers: {
-        'X-CSRFToken': csrfCookie,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfCookie
       }
     });
     const createdUserParsedJSON = await createdUser.json();
