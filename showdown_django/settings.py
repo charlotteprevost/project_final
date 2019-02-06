@@ -19,7 +19,7 @@ SECRET_KEY = secrets.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['show-down.herokuapp.com/', '127.0.0.1:8000']
+ALLOWED_HOSTS = ['show-down.herokuapp.com', '127.0.0.1:8000']
 
 CORS_ORIGIN_WHITELIST = [
     'show-down.herokuapp.com',

@@ -65,12 +65,12 @@ class App extends Component {
 
   getSpotifyTokens = async (props) => {
 
-    const csrfCookie = getCookie.get('csrftoken');
+    const csrfCookie = await getCookie.get('csrftoken');
     console.log(`---------- csrfCookie from getSpotifyTokens ---------- \n`, csrfCookie);
 
     const values = queryString.parse(this.props.location.search);
     console.log(`---------- values ----------`, values);
-    
+
     const tokens = await fetch(
       serverURL + '/tokens/?code=' + values.code, {
         'credentials': 'include',
